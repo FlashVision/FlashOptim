@@ -1,0 +1,20 @@
+# FlashOptim | INT8 Quantization
+# Usage: flashoptim quantize --config configs/flashoptim_quantize_int8.yaml
+
+quantization:
+  method: ptq
+  dtype: int8
+  calibration_samples: 500
+  per_channel: true
+  symmetric: true
+  model_path: pretrained/model.pth
+
+data:
+  calibration_images: data/calibration
+  num_workers: 4
+  batch_size: 32
+
+export:
+  output: optimized/model_int8.onnx
+  simplify: true
+  opset_version: 17

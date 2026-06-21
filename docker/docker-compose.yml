@@ -1,0 +1,63 @@
+# FlashOptim Docker Compose
+# Usage: docker compose -f docker/docker-compose.yml up
+
+version: "3.8"
+
+services:
+  flashoptim:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: flashoptim:latest
+    container_name: flashoptim
+    volumes:
+      - ../data:/app/data
+      - ../pretrained:/app/pretrained
+      - ../optimized:/app/optimized
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    command: ["--help"]
+
+  flashoptim-quantize:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: flashoptim:latest
+    container_name: flashoptim-quantize
+    volumes:
+      - ../data:/app/data
+      - ../pretrained:/app/pretrained
+      - ../optimized:/app/optimized
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    command: ["quantize", "--config", "configs/flashoptim_quantize_int8.yaml"]
+
+  flashoptim-benchmark:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: flashoptim:latest
+    container_name: flashoptim-benchmark
+    volumes:
+      - ../data:/app/data
+      - ../optimized:/app/optimized
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    command: ["benchmark", "--model", "optimized/model_int8.onnx", "--device", "cuda"]

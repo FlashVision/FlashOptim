@@ -1,0 +1,29 @@
+# FlashOptim | Knowledge Distillation for Detection
+# Usage: flashoptim distill --config configs/flashoptim_distill_det.yaml
+
+distillation:
+  method: knowledge
+  temperature: 4.0
+  alpha: 0.7
+  teacher_path: pretrained/teacher_large.pth
+  student_path: pretrained/student_small.pth
+  feature_layers: ["backbone.layer3", "backbone.layer4", "neck.fpn"]
+
+data:
+  train_images: data/train
+  val_images: data/val
+  num_workers: 8
+  batch_size: 32
+
+training:
+  epochs: 100
+  lr: 0.01
+  optimizer: sgd
+  momentum: 0.9
+  weight_decay: 0.0001
+  scheduler: cosine
+  warmup_epochs: 5
+
+export:
+  output: optimized/model_distilled.onnx
+  simplify: true

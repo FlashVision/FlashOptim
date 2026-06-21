@@ -1,0 +1,26 @@
+# FlashOptim | Unstructured Pruning
+# Usage: flashoptim prune --config configs/flashoptim_prune_unstructured.yaml
+
+pruning:
+  method: unstructured
+  sparsity: 0.5
+  criterion: magnitude
+  iterative: true
+  iterations: 3
+  finetune_epochs: 10
+  model_path: pretrained/model.pth
+
+data:
+  train_images: data/train
+  val_images: data/val
+  num_workers: 4
+  batch_size: 16
+
+training:
+  lr: 0.001
+  optimizer: adam
+  scheduler: cosine
+
+export:
+  output: optimized/model_pruned.onnx
+  simplify: true
