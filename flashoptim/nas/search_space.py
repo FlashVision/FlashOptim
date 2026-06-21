@@ -6,7 +6,6 @@ import random
 from typing import Any, Dict, List, Optional
 
 
-
 class SearchSpace:
     """Defines the set of searchable operations and architecture configurations.
 
@@ -88,9 +87,7 @@ class SearchSpace:
             ValueError: If encoding length is not divisible by 4.
         """
         if len(encoding) % 4 != 0:
-            raise ValueError(
-                f"Encoding length must be divisible by 4, got {len(encoding)}"
-            )
+            raise ValueError(f"Encoding length must be divisible by 4, got {len(encoding)}")
 
         arch: Dict[str, Any] = {"channels": [], "kernel_sizes": [], "depths": [], "operations": []}
         for i in range(0, len(encoding), 4):
@@ -125,9 +122,7 @@ class SearchSpace:
 
         return mutated
 
-    def crossover(
-        self, parent_a: Dict[str, Any], parent_b: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def crossover(self, parent_a: Dict[str, Any], parent_b: Dict[str, Any]) -> Dict[str, Any]:
         """Single-point crossover between two parent architectures.
 
         Args:

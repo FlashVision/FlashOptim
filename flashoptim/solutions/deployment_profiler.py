@@ -50,9 +50,7 @@ class DeploymentProfiler:
 
         total_params = sum(p.numel() for p in model.parameters())
         trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-        model_size_mb = sum(
-            p.nelement() * p.element_size() for p in model.parameters()
-        ) / (1024 * 1024)
+        model_size_mb = sum(p.nelement() * p.element_size() for p in model.parameters()) / (1024 * 1024)
 
         zero_params = sum((p == 0).sum().item() for p in model.parameters())
         sparsity = zero_params / total_params if total_params > 0 else 0.0
@@ -64,9 +62,7 @@ class DeploymentProfiler:
             dummy = torch.randn(bs, *self.input_size, device=self.device)
             latency_ms = self._measure_latency(model, dummy)
             latency_results[f"batch_{bs}"] = round(latency_ms, 3)
-            throughput_results[f"batch_{bs}"] = round(
-                bs / (latency_ms / 1000.0), 1
-            )
+            throughput_results[f"batch_{bs}"] = round(bs / (latency_ms / 1000.0), 1)
 
         memory_info = self._measure_memory(model)
 
@@ -120,12 +116,8 @@ class DeploymentProfiler:
         """
         result: Dict[str, Any] = {}
 
-        param_mem = sum(
-            p.nelement() * p.element_size() for p in model.parameters()
-        ) / (1024 * 1024)
-        buffer_mem = sum(
-            b.nelement() * b.element_size() for b in model.buffers()
-        ) / (1024 * 1024)
+        param_mem = sum(p.nelement() * p.element_size() for p in model.parameters()) / (1024 * 1024)
+        buffer_mem = sum(b.nelement() * b.element_size() for b in model.buffers()) / (1024 * 1024)
         result["param_memory_mb"] = round(param_mem, 2)
         result["buffer_memory_mb"] = round(buffer_mem, 2)
 
@@ -134,9 +126,7 @@ class DeploymentProfiler:
             dummy = torch.randn(1, *self.input_size, device=self.device)
             with torch.no_grad():
                 model(dummy)
-            result["peak_gpu_memory_mb"] = round(
-                torch.cuda.max_memory_allocated() / (1024 * 1024), 2
-            )
+            result["peak_gpu_memory_mb"] = round(torch.cuda.max_memory_allocated() / (1024 * 1024), 2)
 
         return result
 
@@ -152,9 +142,7 @@ class DeploymentProfiler:
         suggestions = []
 
         if profile_result["model_size_mb"] > 100:
-            suggestions.append(
-                "Model is large (>100 MB). Consider INT8 quantization to reduce size by ~4x."
-            )
+            suggestions.append("Model is large (>100 MB). Consider INT8 quantization to reduce size by ~4x.")
 
         if profile_result["sparsity"] < 0.1:
             suggestions.append(
@@ -170,8 +158,7 @@ class DeploymentProfiler:
 
         if profile_result["total_params"] > 10_000_000:
             suggestions.append(
-                "Model has >10M parameters. Knowledge distillation to a smaller student "
-                "can yield significant speedups."
+                "Model has >10M parameters. Knowledge distillation to a smaller student can yield significant speedups."
             )
 
         if not suggestions:
@@ -194,12 +181,8 @@ class DeploymentProfiler:
             Comparison dictionary with improvements.
         """
         comparison: Dict[str, Any] = {
-            "param_reduction": round(
-                1.0 - optimized["total_params"] / max(original["total_params"], 1), 4
-            ),
-            "size_reduction": round(
-                1.0 - optimized["model_size_mb"] / max(original["model_size_mb"], 0.01), 4
-            ),
+            "param_reduction": round(1.0 - optimized["total_params"] / max(original["total_params"], 1), 4),
+            "size_reduction": round(1.0 - optimized["model_size_mb"] / max(original["model_size_mb"], 0.01), 4),
             "sparsity_gain": round(optimized["sparsity"] - original["sparsity"], 4),
         }
 
@@ -213,7 +196,4 @@ class DeploymentProfiler:
         return comparison
 
     def __repr__(self) -> str:
-        return (
-            f"DeploymentProfiler(device={self.device}, input_size={self.input_size}, "
-            f"batch_sizes={self.batch_sizes})"
-        )
+        return f"DeploymentProfiler(device={self.device}, input_size={self.input_size}, batch_sizes={self.batch_sizes})"

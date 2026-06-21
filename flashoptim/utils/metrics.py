@@ -86,11 +86,13 @@ def compute_map(
                 if label == cls:
                     score = pred_scores[i] if i < len(pred_scores) else 1.0
                     box = pred_boxes[i] if i < len(pred_boxes) else [0, 0, 0, 0]
-                    all_detections.append({
-                        "score": score,
-                        "box": box,
-                        "img_idx": img_idx,
-                    })
+                    all_detections.append(
+                        {
+                            "score": score,
+                            "box": box,
+                            "img_idx": img_idx,
+                        }
+                    )
 
         if total_gt == 0:
             continue
@@ -219,12 +221,8 @@ def compute_compression_ratio(
     orig_params = sum(p.numel() for p in original_model.parameters())
     opt_params = sum(p.numel() for p in optimized_model.parameters())
 
-    orig_size = sum(
-        p.nelement() * p.element_size() for p in original_model.parameters()
-    )
-    opt_size = sum(
-        p.nelement() * p.element_size() for p in optimized_model.parameters()
-    )
+    orig_size = sum(p.nelement() * p.element_size() for p in original_model.parameters())
+    opt_size = sum(p.nelement() * p.element_size() for p in optimized_model.parameters())
 
     return {
         "param_ratio": opt_params / orig_params if orig_params > 0 else 1.0,

@@ -151,9 +151,7 @@ class Trainer:
                     if self.distiller is not None and teacher is not None:
                         with torch.no_grad():
                             teacher_outputs = teacher(inputs)
-                        loss = self.distiller.compute_loss(
-                            outputs, teacher_outputs, targets, criterion
-                        )
+                        loss = self.distiller.compute_loss(outputs, teacher_outputs, targets, criterion)
                     else:
                         loss = criterion(outputs, targets)
 
@@ -207,9 +205,7 @@ class Trainer:
 
         return active_model
 
-    def _validate(
-        self, model: nn.Module, val_loader: DataLoader, criterion: nn.Module
-    ) -> tuple:
+    def _validate(self, model: nn.Module, val_loader: DataLoader, criterion: nn.Module) -> tuple:
         """Run validation pass and return (loss, accuracy)."""
         model.eval()
         total_loss = 0.0

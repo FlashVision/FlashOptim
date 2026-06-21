@@ -58,9 +58,7 @@ class EfficientNeck(nn.Module):
 
         self.extra_levels = nn.ModuleList()
         for _ in range(num_extra_levels):
-            self.extra_levels.append(
-                nn.Conv2d(out_channels, out_channels, 3, stride=2, padding=1, bias=False)
-            )
+            self.extra_levels.append(nn.Conv2d(out_channels, out_channels, 3, stride=2, padding=1, bias=False))
 
     def forward(self, features: List[torch.Tensor]) -> List[torch.Tensor]:
         """Forward pass building the feature pyramid.

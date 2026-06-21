@@ -78,6 +78,7 @@ class TorchCompiler:
 
         if not hasattr(torch, "compile"):
             import warnings
+
             warnings.warn("torch.compile not available (requires PyTorch 2.0+). Returning original model.")
             self._compiled_model = model
             return model

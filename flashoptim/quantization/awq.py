@@ -112,6 +112,7 @@ class AWQQuantizer:
                 if name not in stats:
                     stats[name] = []
                 stats[name].append(channel_magnitude)
+
             return hook_fn
 
         for name, module in model.named_modules():
@@ -158,8 +159,10 @@ class AWQQuantizer:
 
         n_out, n_in = weight.shape
 
-        act_scale = activation_scale[:n_in] if activation_scale.shape[0] >= n_in else (
-            F.pad(activation_scale, (0, n_in - activation_scale.shape[0]))
+        act_scale = (
+            activation_scale[:n_in]
+            if activation_scale.shape[0] >= n_in
+            else (F.pad(activation_scale, (0, n_in - activation_scale.shape[0])))
         )
         act_scale = act_scale.clamp(min=1e-8)
 
@@ -212,9 +215,7 @@ class AWQQuantizer:
     def _quantize_naive(self, layer: nn.Module) -> None:
         """Simple round-to-nearest quantization without scaling."""
         if isinstance(layer, nn.Linear):
-            layer.weight.data = self._pseudo_quantize(
-                layer.weight.data.float()
-            ).to(layer.weight.dtype)
+            layer.weight.data = self._pseudo_quantize(layer.weight.data.float()).to(layer.weight.dtype)
         elif isinstance(layer, nn.Conv2d):
             orig_shape = layer.weight.shape
             flat = layer.weight.data.float().flatten(1)
@@ -236,9 +237,7 @@ class AWQQuantizer:
         else:
             return self._quantize_group(weight, qmin, qmax)
 
-    def _quantize_group(
-        self, weight: torch.Tensor, qmin: int, qmax: int
-    ) -> torch.Tensor:
+    def _quantize_group(self, weight: torch.Tensor, qmin: int, qmax: int) -> torch.Tensor:
         """Quantize and dequantize a weight group."""
         if self.zero_point:
             w_min = weight.min(dim=-1, keepdim=True).values
@@ -260,7 +259,4 @@ class AWQQuantizer:
         return self._scales
 
     def __repr__(self) -> str:
-        return (
-            f"AWQQuantizer(bits={self.bits}, group_size={self.group_size}, "
-            f"auto_scale={self.auto_scale})"
-        )
+        return f"AWQQuantizer(bits={self.bits}, group_size={self.group_size}, auto_scale={self.auto_scale})"

@@ -84,9 +84,7 @@ class UnstructuredPruner:
         """Apply pruning to specified parameters."""
         if self.method == "magnitude":
             if self.global_pruning:
-                prune_utils.global_unstructured(
-                    parameters, pruning_method=prune_utils.L1Unstructured, amount=amount
-                )
+                prune_utils.global_unstructured(parameters, pruning_method=prune_utils.L1Unstructured, amount=amount)
             else:
                 for module, param_name in parameters:
                     prune_utils.l1_unstructured(module, param_name, amount=amount)

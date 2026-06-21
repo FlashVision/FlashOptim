@@ -79,11 +79,13 @@ class CompressedBackbone(nn.Module):
             act_fn,
         ]
         for _ in range(num_blocks - 1):
-            layers.extend([
-                nn.Conv2d(out_ch, out_ch, kernel_size=3, stride=1, padding=1, bias=False),
-                nn.BatchNorm2d(out_ch),
-                act_fn,
-            ])
+            layers.extend(
+                [
+                    nn.Conv2d(out_ch, out_ch, kernel_size=3, stride=1, padding=1, bias=False),
+                    nn.BatchNorm2d(out_ch),
+                    act_fn,
+                ]
+            )
         return nn.Sequential(*layers)
 
     def forward(self, x: torch.Tensor) -> List[torch.Tensor]:

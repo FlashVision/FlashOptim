@@ -97,10 +97,7 @@ class FlashOptim(nn.Module):
                 f"Expected 'model', 'state_dict', or 'model_state_dict'."
             )
 
-        raise ValueError(
-            f"Unsupported checkpoint type: {type(checkpoint)}. "
-            f"Expected nn.Module or dict."
-        )
+        raise ValueError(f"Unsupported checkpoint type: {type(checkpoint)}. Expected nn.Module or dict.")
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass through the wrapped model.

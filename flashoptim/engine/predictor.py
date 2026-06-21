@@ -74,7 +74,9 @@ class Predictor:
             except ImportError:
                 raise ImportError("onnxruntime is required for ONNX inference: pip install onnxruntime")
 
-            providers = ["CUDAExecutionProvider", "CPUExecutionProvider"] if self.device == "cuda" else ["CPUExecutionProvider"]
+            providers = (
+                ["CUDAExecutionProvider", "CPUExecutionProvider"] if self.device == "cuda" else ["CPUExecutionProvider"]
+            )
             session = ort.InferenceSession(str(self.model_path), providers=providers)
             return session
 
@@ -103,7 +105,6 @@ class Predictor:
                 output = self.model(input_tensor)
             return self._postprocess_torch(output)
         else:
-
             input_name = self.model.get_inputs()[0].name
             output = self.model.run(None, {input_name: input_tensor.cpu().numpy()})
             return self._postprocess_onnx(output)
@@ -119,6 +120,7 @@ class Predictor:
                 tensor = torch.from_numpy(source.astype(np.float32))
         elif isinstance(source, (str, Path)):
             from PIL import Image
+
             img = Image.open(source).convert("RGB")
             img_np = np.array(img).astype(np.float32) / 255.0
             tensor = torch.from_numpy(img_np).permute(2, 0, 1)

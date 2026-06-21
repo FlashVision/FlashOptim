@@ -127,7 +127,4 @@ class StructuredPruner:
         return plan
 
     def __repr__(self) -> str:
-        return (
-            f"StructuredPruner(sparsity={self.sparsity}, criterion={self.criterion}, "
-            f"granularity={self.granularity})"
-        )
+        return f"StructuredPruner(sparsity={self.sparsity}, criterion={self.criterion}, granularity={self.granularity})"

@@ -9,6 +9,11 @@ from flashoptim.pruning.wanda import WandaPruner
 from flashoptim.pruning.nm_sparsity import NMSparsityPruner
 
 __all__ = [
-    "UnstructuredPruner", "StructuredPruner", "LotteryTicketPruner", "ImportanceScorer",
-    "SparseGPTPruner", "WandaPruner", "NMSparsityPruner",
+    "UnstructuredPruner",
+    "StructuredPruner",
+    "LotteryTicketPruner",
+    "ImportanceScorer",
+    "SparseGPTPruner",
+    "WandaPruner",
+    "NMSparsityPruner",
 ]

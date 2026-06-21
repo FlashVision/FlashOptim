@@ -62,9 +62,13 @@ class PTQuantizer:
         if self.dtype == "fp16":
             return torch.ao.quantization.float16_static_qconfig
 
-        qscheme = torch.per_channel_symmetric if (self.per_channel and self.symmetric) else (
-            torch.per_channel_affine if self.per_channel else (
-                torch.per_tensor_symmetric if self.symmetric else torch.per_tensor_affine
+        qscheme = (
+            torch.per_channel_symmetric
+            if (self.per_channel and self.symmetric)
+            else (
+                torch.per_channel_affine
+                if self.per_channel
+                else (torch.per_tensor_symmetric if self.symmetric else torch.per_tensor_affine)
             )
         )
 
@@ -74,9 +78,7 @@ class PTQuantizer:
             act_observer = MinMaxObserver.with_args(qscheme=torch.per_tensor_symmetric)
 
         if self.per_channel:
-            weight_observer = PerChannelMinMaxObserver.with_args(
-                dtype=torch.qint8, qscheme=qscheme
-            )
+            weight_observer = PerChannelMinMaxObserver.with_args(dtype=torch.qint8, qscheme=qscheme)
         else:
             weight_observer = MinMaxObserver.with_args(
                 dtype=torch.qint8,

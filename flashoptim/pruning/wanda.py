@@ -120,6 +120,7 @@ class WandaPruner:
                 else:
                     norms[name] = col_norm
                     counts[name] = 1
+
             return hook_fn
 
         for name, module in layers.items():
@@ -160,8 +161,10 @@ class WandaPruner:
             return
 
         n_rows, n_cols = weight.shape
-        act_norm = activation_norm[:n_cols] if activation_norm.shape[0] >= n_cols else (
-            torch.nn.functional.pad(activation_norm, (0, n_cols - activation_norm.shape[0]), value=1.0)
+        act_norm = (
+            activation_norm[:n_cols]
+            if activation_norm.shape[0] >= n_cols
+            else (torch.nn.functional.pad(activation_norm, (0, n_cols - activation_norm.shape[0]), value=1.0))
         )
 
         scores = weight.abs() * act_norm.unsqueeze(0)
@@ -227,8 +230,10 @@ class WandaPruner:
                 continue
 
             n_cols = weight.shape[1]
-            an = act_norm[:n_cols] if act_norm.shape[0] >= n_cols else (
-                torch.nn.functional.pad(act_norm, (0, n_cols - act_norm.shape[0]), value=1.0)
+            an = (
+                act_norm[:n_cols]
+                if act_norm.shape[0] >= n_cols
+                else (torch.nn.functional.pad(act_norm, (0, n_cols - act_norm.shape[0]), value=1.0))
             )
             scores = (weight.abs() * an.unsqueeze(0)).flatten()
             all_scores.append(scores)
@@ -245,7 +250,7 @@ class WandaPruner:
         offset = 0
         for name, module, shape in layer_info:
             n_elements = shape[0] * shape[1]
-            layer_scores = all_scores_cat[offset:offset + n_elements].reshape(shape)
+            layer_scores = all_scores_cat[offset : offset + n_elements].reshape(shape)
             mask = layer_scores > threshold
 
             if isinstance(module, nn.Linear):
@@ -267,11 +272,11 @@ class WandaPruner:
         mask = torch.ones_like(scores, dtype=torch.bool)
 
         for col in range(0, n_cols - m + 1, m):
-            group = scores[:, col:col + m]
+            group = scores[:, col : col + m]
             _, keep_idx = torch.topk(group, k=m - n, dim=1, largest=True)
             group_mask = torch.zeros_like(group, dtype=torch.bool)
             group_mask.scatter_(1, keep_idx, True)
-            mask[:, col:col + m] = group_mask
+            mask[:, col : col + m] = group_mask
 
         return mask
 
@@ -301,6 +306,4 @@ class WandaPruner:
 
     def __repr__(self) -> str:
         nm_str = f", N:M={self.n}:{self.m}" if self.use_nm else ""
-        return (
-            f"WandaPruner(sparsity={self.sparsity}, scope='{self.pruning_scope}'{nm_str})"
-        )
+        return f"WandaPruner(sparsity={self.sparsity}, scope='{self.pruning_scope}'{nm_str})"

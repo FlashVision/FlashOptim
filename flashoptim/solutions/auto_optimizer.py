@@ -36,9 +36,7 @@ class AutoOptimizer:
         dtype: Optional[str] = None,
     ) -> None:
         if target not in self.TARGET_PROFILES:
-            raise ValueError(
-                f"Unknown target: {target}. Options: {list(self.TARGET_PROFILES.keys())}"
-            )
+            raise ValueError(f"Unknown target: {target}. Options: {list(self.TARGET_PROFILES.keys())}")
 
         profile = self.TARGET_PROFILES[target]
         self.target = target
@@ -62,9 +60,7 @@ class AutoOptimizer:
             Optimized model.
         """
         original_params = sum(p.numel() for p in model.parameters())
-        original_size = sum(
-            p.nelement() * p.element_size() for p in model.parameters()
-        ) / (1024 * 1024)
+        original_size = sum(p.nelement() * p.element_size() for p in model.parameters()) / (1024 * 1024)
 
         self._report = {
             "target": self.target,
@@ -80,15 +76,11 @@ class AutoOptimizer:
             model = self._apply_quantization(model, **kwargs)
 
         final_params = sum(p.numel() for p in model.parameters())
-        final_size = sum(
-            p.nelement() * p.element_size() for p in model.parameters()
-        ) / (1024 * 1024)
+        final_size = sum(p.nelement() * p.element_size() for p in model.parameters()) / (1024 * 1024)
 
         self._report["final_params"] = final_params
         self._report["final_size_mb"] = round(final_size, 2)
-        self._report["compression_ratio"] = round(
-            original_size / final_size if final_size > 0 else 1.0, 2
-        )
+        self._report["compression_ratio"] = round(original_size / final_size if final_size > 0 else 1.0, 2)
 
         return model
 
@@ -108,12 +100,14 @@ class AutoOptimizer:
         model = pruner.prune(model)
         sparsity_stats = pruner.get_sparsity(model)
 
-        self._report["steps"].append({
-            "step": "pruning",
-            "method": "unstructured_magnitude",
-            "target_sparsity": self.sparsity,
-            "actual_sparsity": sparsity_stats.get("global", 0.0),
-        })
+        self._report["steps"].append(
+            {
+                "step": "pruning",
+                "method": "unstructured_magnitude",
+                "target_sparsity": self.sparsity,
+                "actual_sparsity": sparsity_stats.get("global", 0.0),
+            }
+        )
 
         return model
 
@@ -137,19 +131,23 @@ class AutoOptimizer:
                 model,
                 calibration_loader=calibration_loader,
             )
-            self._report["steps"].append({
-                "step": "quantization",
-                "method": "ptq",
-                "dtype": self.dtype,
-                "status": "completed",
-            })
+            self._report["steps"].append(
+                {
+                    "step": "quantization",
+                    "method": "ptq",
+                    "dtype": self.dtype,
+                    "status": "completed",
+                }
+            )
         except Exception as e:
-            self._report["steps"].append({
-                "step": "quantization",
-                "method": "ptq",
-                "dtype": self.dtype,
-                "status": f"failed — {str(e)}",
-            })
+            self._report["steps"].append(
+                {
+                    "step": "quantization",
+                    "method": "ptq",
+                    "dtype": self.dtype,
+                    "status": f"failed — {str(e)}",
+                }
+            )
 
         return model
 

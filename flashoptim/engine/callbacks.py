@@ -104,10 +104,7 @@ class EarlyStopping(Callback):
             self.best = value
             return
 
-        improved = (
-            (value < self.best - self.min_delta) if self.mode == "min"
-            else (value > self.best + self.min_delta)
-        )
+        improved = (value < self.best - self.min_delta) if self.mode == "min" else (value > self.best + self.min_delta)
 
         if improved:
             self.best = value

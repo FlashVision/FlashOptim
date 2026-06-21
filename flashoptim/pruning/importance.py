@@ -79,9 +79,7 @@ class ImportanceScorer:
                 scores[name] = self._maybe_normalize(s)
         return scores
 
-    def _taylor_importance(
-        self, model: nn.Module, dataloader: Optional[DataLoader]
-    ) -> Dict[str, torch.Tensor]:
+    def _taylor_importance(self, model: nn.Module, dataloader: Optional[DataLoader]) -> Dict[str, torch.Tensor]:
         """Compute Taylor expansion-based importance.
 
         Score = |weight * gradient| — approximates loss change from removal.
@@ -133,9 +131,7 @@ class ImportanceScorer:
         model.eval()
         return scores
 
-    def _gradient_importance(
-        self, model: nn.Module, dataloader: Optional[DataLoader]
-    ) -> Dict[str, torch.Tensor]:
+    def _gradient_importance(self, model: nn.Module, dataloader: Optional[DataLoader]) -> Dict[str, torch.Tensor]:
         """Compute gradient-based importance.
 
         Score = mean |gradient| across calibration batches.
@@ -186,9 +182,7 @@ class ImportanceScorer:
         model.eval()
         return scores
 
-    def _activation_importance(
-        self, model: nn.Module, dataloader: Optional[DataLoader]
-    ) -> Dict[str, torch.Tensor]:
+    def _activation_importance(self, model: nn.Module, dataloader: Optional[DataLoader]) -> Dict[str, torch.Tensor]:
         """Compute activation-based importance.
 
         Score = mean activation magnitude at each channel/filter.
@@ -208,6 +202,7 @@ class ImportanceScorer:
                     activation_sums[name] = channel_score
                 else:
                     activation_sums[name] += channel_score
+
             return hook_fn
 
         for name, module in model.named_modules():

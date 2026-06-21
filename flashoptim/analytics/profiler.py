@@ -70,9 +70,7 @@ class Profiler:
                     "type": module.__class__.__name__,
                     "params": params,
                     "time_ms": round(layer_time * 1000, 4),
-                    "time_pct": round(
-                        layer_time / total_time * 100 if total_time > 0 else 0, 2
-                    ),
+                    "time_pct": round(layer_time / total_time * 100 if total_time > 0 else 0, 2),
                 }
 
         return result
@@ -91,12 +89,8 @@ class Profiler:
 
         for name, module in model.named_modules():
             if len(list(module.children())) == 0:
-                param_mem = sum(
-                    p.nelement() * p.element_size() for p in module.parameters()
-                ) / (1024 * 1024)
-                buffer_mem = sum(
-                    b.nelement() * b.element_size() for b in module.buffers()
-                ) / (1024 * 1024)
+                param_mem = sum(p.nelement() * p.element_size() for p in module.parameters()) / (1024 * 1024)
+                buffer_mem = sum(b.nelement() * b.element_size() for b in module.buffers()) / (1024 * 1024)
 
                 if param_mem > 0 or buffer_mem > 0:
                     result[name] = {

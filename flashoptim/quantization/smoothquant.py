@@ -116,6 +116,7 @@ class SmoothQuantizer:
                     act_maxes[name] = torch.max(act_maxes[name], channel_max)
                 else:
                     act_maxes[name] = channel_max
+
             return hook_fn
 
         for name, module in model.named_modules():
@@ -167,8 +168,10 @@ class SmoothQuantizer:
             else:
                 continue
 
-            act_s = act_scale[:n_in] if act_scale.shape[0] >= n_in else (
-                F.pad(act_scale, (0, n_in - act_scale.shape[0]), value=1.0)
+            act_s = (
+                act_scale[:n_in]
+                if act_scale.shape[0] >= n_in
+                else (F.pad(act_scale, (0, n_in - act_scale.shape[0]), value=1.0))
             )
             act_s = act_s.clamp(min=1e-8)
 

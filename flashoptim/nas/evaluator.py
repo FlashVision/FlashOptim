@@ -104,12 +104,14 @@ class Evaluator:
         layers: List[nn.Module] = []
         in_channels = 3
 
-        for i, (ch, ks, depth, op) in enumerate(zip(
-            architecture["channels"],
-            architecture["kernel_sizes"],
-            architecture["depths"],
-            architecture["operations"],
-        )):
+        for i, (ch, ks, depth, op) in enumerate(
+            zip(
+                architecture["channels"],
+                architecture["kernel_sizes"],
+                architecture["depths"],
+                architecture["operations"],
+            )
+        ):
             for d in range(depth):
                 c_in = in_channels if d == 0 else ch
                 layers.append(self._build_op(op, c_in, ch, ks))

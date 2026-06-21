@@ -105,6 +105,7 @@ class SparseGPTPruner:
                 if inp.dim() > 2:
                     inp = inp.reshape(-1, inp.shape[-1])
                 activations[name].append(inp)
+
             return hook_fn
 
         for name, module in layers.items():
@@ -198,8 +199,8 @@ class SparseGPTPruner:
                 if not col_mask.all():
                     error_col = errors[:, j]
                     if j + 1 < block_cols:
-                        update = error_col.unsqueeze(1) * H_block[j, j + 1:block_cols].unsqueeze(0)
-                        W_block[:, j + 1:] -= update * block_mask[:, j + 1:].float()
+                        update = error_col.unsqueeze(1) * H_block[j, j + 1 : block_cols].unsqueeze(0)
+                        W_block[:, j + 1 :] -= update * block_mask[:, j + 1 :].float()
 
             W[:, col_start:col_end] = W_block
             mask[:, col_start:col_end] = block_mask
@@ -220,19 +221,17 @@ class SparseGPTPruner:
         }
 
     @staticmethod
-    def _nm_prune_block(
-        weight: torch.Tensor, n: int, m: int
-    ) -> torch.Tensor:
+    def _nm_prune_block(weight: torch.Tensor, n: int, m: int) -> torch.Tensor:
         """Apply N:M structured sparsity pattern to a block."""
         n_rows, n_cols = weight.shape
         mask = torch.ones_like(weight, dtype=torch.bool)
 
         for col in range(0, n_cols - m + 1, m):
-            group = weight[:, col:col + m]
+            group = weight[:, col : col + m]
             _, indices = torch.topk(group.abs(), k=m - n, dim=1, largest=True)
             group_mask = torch.zeros_like(group, dtype=torch.bool)
             group_mask.scatter_(1, indices, True)
-            mask[:, col:col + m] = group_mask
+            mask[:, col : col + m] = group_mask
 
         return mask
 
@@ -262,7 +261,4 @@ class SparseGPTPruner:
 
     def __repr__(self) -> str:
         nm_str = f", N:M={self.prunen}:{self.prunem}" if self.prunen > 0 else ""
-        return (
-            f"SparseGPTPruner(sparsity={self.sparsity}, "
-            f"block_size={self.block_size}{nm_str})"
-        )
+        return f"SparseGPTPruner(sparsity={self.sparsity}, block_size={self.block_size}{nm_str})"

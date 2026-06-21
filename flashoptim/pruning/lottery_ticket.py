@@ -45,10 +45,7 @@ class LotteryTicketPruner:
         Args:
             model: Model at initialization (or rewind epoch).
         """
-        self._initial_weights = {
-            name: param.data.clone()
-            for name, param in model.named_parameters()
-        }
+        self._initial_weights = {name: param.data.clone() for name, param in model.named_parameters()}
 
     def find_ticket(
         self,
@@ -86,10 +83,7 @@ class LotteryTicketPruner:
             self._apply_masks(model)
 
             current_sp = self.current_sparsity
-            print(
-                f"  IMP Round {round_idx + 1}/{self.rounds} — "
-                f"Sparsity: {current_sp:.2%}"
-            )
+            print(f"  IMP Round {round_idx + 1}/{self.rounds} — Sparsity: {current_sp:.2%}")
 
             if current_sp >= self.target_sparsity:
                 break

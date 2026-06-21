@@ -113,6 +113,7 @@ class GPTQQuantizer:
                 if inp.dim() > 2:
                     inp = inp.reshape(-1, inp.shape[-1])
                 activations[name].append(inp)
+
             return hook_fn
 
         for name, module in layers.items():
@@ -194,8 +195,9 @@ class GPTQQuantizer:
 
                 group_idx = col_idx // self.group_size if self.group_size > 0 else 0
                 scale, zero_point = self._compute_quantization_params(
-                    W[:, max(0, group_idx * self.group_size):min(n_cols, (group_idx + 1) * self.group_size)]
-                    if self.group_size > 0 else W
+                    W[:, max(0, group_idx * self.group_size) : min(n_cols, (group_idx + 1) * self.group_size)]
+                    if self.group_size > 0
+                    else W
                 )
 
                 q_col = self._quantize_weight(w_col, scale, zero_point)
@@ -205,7 +207,7 @@ class GPTQQuantizer:
                 total_error += (w_col - q_col).pow(2).sum().item()
 
                 if j + 1 < block_cols:
-                    W_block[:, j + 1:] -= error.unsqueeze(1) * H_block_inv[j, j + 1:block_cols].unsqueeze(0)
+                    W_block[:, j + 1 :] -= error.unsqueeze(1) * H_block_inv[j, j + 1 : block_cols].unsqueeze(0)
 
         if self.act_order:
             inv_perm = torch.argsort(perm)
@@ -222,9 +224,7 @@ class GPTQQuantizer:
             "bits": self.bits,
         }
 
-    def _compute_quantization_params(
-        self, weight: torch.Tensor
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+    def _compute_quantization_params(self, weight: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         """Compute scale and zero-point for quantization."""
         qmin = 0
         qmax = (1 << self.bits) - 1
@@ -241,9 +241,7 @@ class GPTQQuantizer:
 
         return scale, zero_point
 
-    def _quantize_weight(
-        self, weight: torch.Tensor, scale: torch.Tensor, zero_point: torch.Tensor
-    ) -> torch.Tensor:
+    def _quantize_weight(self, weight: torch.Tensor, scale: torch.Tensor, zero_point: torch.Tensor) -> torch.Tensor:
         """Quantize and dequantize a weight tensor."""
         qmin = 0
         qmax = (1 << self.bits) - 1

@@ -29,7 +29,7 @@ def main():
         arch = search_space.sample()
         encoding = search_space.encode(arch)
         decoded = search_space.decode(encoding)
-        print(f"  Arch {i+1}: channels={arch['channels']}, ops={arch['operations']}")
+        print(f"  Arch {i + 1}: channels={arch['channels']}, ops={arch['operations']}")
         print(f"           encoding={encoding}")
         assert decoded == arch, "Encode/decode round-trip failed"
 

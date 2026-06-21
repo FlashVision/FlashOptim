@@ -81,7 +81,9 @@ def main():
 
     targets = torch.randint(0, 10, (4,))
     loss = kd.compute_loss(
-        student_logits, teacher_logits, targets,
+        student_logits,
+        teacher_logits,
+        targets,
         task_loss_fn=nn.CrossEntropyLoss(),
     )
     print(f"  KD Loss: {loss.item():.4f}")

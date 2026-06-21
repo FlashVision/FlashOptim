@@ -56,9 +56,7 @@ class SelfDistiller:
             if module is None:
                 raise ValueError(f"Layer '{layer_name}' not found in model")
 
-            hook = module.register_forward_hook(
-                self._make_hook(layer_name)
-            )
+            hook = module.register_forward_hook(self._make_hook(layer_name))
             self._hooks.append(hook)
 
         model.eval()
@@ -100,8 +98,10 @@ class SelfDistiller:
 
     def _make_hook(self, name: str):
         """Create a forward hook that captures intermediate features."""
+
         def hook_fn(module, input, output):
             self._features[name] = output
+
         return hook_fn
 
     def compute_self_distill_loss(
@@ -228,7 +228,4 @@ class SelfDistiller:
         return model
 
     def __repr__(self) -> str:
-        return (
-            f"SelfDistiller(aux_layers={self.aux_layers}, T={self.temperature}, "
-            f"aux_weight={self.aux_weight})"
-        )
+        return f"SelfDistiller(aux_layers={self.aux_layers}, T={self.temperature}, aux_weight={self.aux_weight})"

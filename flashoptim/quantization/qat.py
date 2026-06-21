@@ -53,9 +53,11 @@ class QATTrainer:
 
         model.train()
         model.qconfig = get_default_qat_qconfig("x86")
-        model = torch.ao.quantization.fuse_modules_qat(
-            model, self._get_fusable_modules(model), inplace=True
-        ) if self._get_fusable_modules(model) else model
+        model = (
+            torch.ao.quantization.fuse_modules_qat(model, self._get_fusable_modules(model), inplace=True)
+            if self._get_fusable_modules(model)
+            else model
+        )
         prepared = prepare_qat(model, inplace=False)
         return prepared
 

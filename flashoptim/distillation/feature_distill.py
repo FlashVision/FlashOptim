@@ -60,21 +60,18 @@ class FeatureDistiller:
             def hook_fn(module, inp, output):
                 if isinstance(output, torch.Tensor) and output.ndim == 4:
                     storage[name] = output.shape[1]
+
             return hook_fn
 
         for layer_name in self.teacher_layers:
             module = dict(teacher.named_modules()).get(layer_name)
             if module is not None:
-                t_hooks.append(module.register_forward_hook(
-                    make_channel_hook(teacher_channels, layer_name)
-                ))
+                t_hooks.append(module.register_forward_hook(make_channel_hook(teacher_channels, layer_name)))
 
         for layer_name in self.student_layers:
             module = dict(student.named_modules()).get(layer_name)
             if module is not None:
-                s_hooks.append(module.register_forward_hook(
-                    make_channel_hook(student_channels, layer_name)
-                ))
+                s_hooks.append(module.register_forward_hook(make_channel_hook(student_channels, layer_name)))
 
         dummy = torch.randn(1, 3, 224, 224)
         teacher.eval()
@@ -119,8 +116,10 @@ class FeatureDistiller:
 
     def _make_hook(self, storage: Dict[str, torch.Tensor], name: str):
         """Create a forward hook that stores feature maps."""
+
         def hook_fn(module, input, output):
             storage[name] = output
+
         return hook_fn
 
     def compute_loss(self) -> torch.Tensor:
@@ -152,9 +151,7 @@ class FeatureDistiller:
             elif self.loss_type == "l1":
                 loss = F.l1_loss(s_feat, t_feat)
             elif self.loss_type == "cosine":
-                cos = F.cosine_similarity(
-                    s_feat.flatten(2), t_feat.flatten(2), dim=2
-                )
+                cos = F.cosine_similarity(s_feat.flatten(2), t_feat.flatten(2), dim=2)
                 loss = (1.0 - cos).mean()
             elif self.loss_type == "attention":
                 s_att = self._attention_map(s_feat)

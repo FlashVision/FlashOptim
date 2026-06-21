@@ -137,10 +137,7 @@ class Validator:
             print("  " + "-" * 65)
             for key in orig_results:
                 if key in delta:
-                    print(
-                        f"  {key:<20} {orig_results[key]:<15.4f} "
-                        f"{opt_results[key]:<15.4f} {delta[key]:<+15.4f}"
-                    )
+                    print(f"  {key:<20} {orig_results[key]:<15.4f} {opt_results[key]:<15.4f} {delta[key]:<+15.4f}")
 
         return comparison
 

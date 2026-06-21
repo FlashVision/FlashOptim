@@ -64,9 +64,7 @@ class Benchmark:
         fps = self.runs / elapsed
 
         total_params = sum(p.numel() for p in model.parameters())
-        model_size_mb = sum(
-            p.nelement() * p.element_size() for p in model.parameters()
-        ) / (1024 * 1024)
+        model_size_mb = sum(p.nelement() * p.element_size() for p in model.parameters()) / (1024 * 1024)
 
         return {
             "fps": round(fps, 1),
@@ -91,7 +89,4 @@ class Benchmark:
         return results
 
     def __repr__(self) -> str:
-        return (
-            f"Benchmark(device={self.device}, input_size={self.input_size}, "
-            f"warmup={self.warmup}, runs={self.runs})"
-        )
+        return f"Benchmark(device={self.device}, input_size={self.input_size}, warmup={self.warmup}, runs={self.runs})"

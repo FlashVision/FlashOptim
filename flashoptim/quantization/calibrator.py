@@ -104,9 +104,7 @@ class Calibrator:
                     img = Image.open(img_path).convert("RGB")
                     img_np = np.array(img).astype(np.float32) / 255.0
                     tensor = torch.from_numpy(img_np).permute(2, 0, 1)
-                    tensor = torch.nn.functional.interpolate(
-                        tensor.unsqueeze(0), size=(640, 640)
-                    ).squeeze(0)
+                    tensor = torch.nn.functional.interpolate(tensor.unsqueeze(0), size=(640, 640)).squeeze(0)
                     tensors.append(tensor)
                 batch_tensor = torch.stack(tensors).to(self.device)
                 model(batch_tensor)
@@ -115,13 +113,12 @@ class Calibrator:
         """Register forward hooks on quantizable layers."""
         for name, module in model.named_modules():
             if isinstance(module, (nn.Conv2d, nn.Linear)):
-                hook = module.register_forward_hook(
-                    self._make_hook(name)
-                )
+                hook = module.register_forward_hook(self._make_hook(name))
                 self._hooks.append(hook)
 
     def _make_hook(self, layer_name: str):
         """Create a forward hook that collects activation statistics."""
+
         def hook_fn(module, input, output):
             if layer_name not in self._statistics:
                 self._statistics[layer_name] = {
@@ -135,6 +132,7 @@ class Calibrator:
                 self._statistics[layer_name]["max"] = torch.max(
                     self._statistics[layer_name]["max"], output.detach().max()
                 )
+
         return hook_fn
 
     def _remove_hooks(self) -> None:
@@ -149,7 +147,4 @@ class Calibrator:
         Returns:
             Dictionary mapping layer names to (min, max) tuples.
         """
-        return {
-            name: (stats["min"].item(), stats["max"].item())
-            for name, stats in self._statistics.items()
-        }
+        return {name: (stats["min"].item(), stats["max"].item()) for name, stats in self._statistics.items()}

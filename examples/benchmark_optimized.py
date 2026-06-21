@@ -64,10 +64,12 @@ def main():
     print(f"  Sparsity:   {get_sparsity(optimized)['global']:.2%}")
 
     print("\n--- Comparison ---")
-    comparison = benchmark.compare({
-        "original": original,
-        "pruned_50pct": optimized,
-    })
+    comparison = benchmark.compare(
+        {
+            "original": original,
+            "pruned_50pct": optimized,
+        }
+    )
     for name, res in comparison.items():
         print(f"  {name}: {res['fps']:.1f} FPS, {res['latency_ms']:.3f} ms, {res['params']:,} params")
 

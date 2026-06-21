@@ -79,9 +79,7 @@ class NMSparsityPruner:
         model.eval()
 
         if self.criterion == "wanda" and calibration_loader is not None:
-            activation_norms = self._collect_activation_norms(
-                model, calibration_loader
-            )
+            activation_norms = self._collect_activation_norms(model, calibration_loader)
         else:
             activation_norms = {}
 
@@ -147,8 +145,10 @@ class NMSparsityPruner:
             return weight.abs()
         elif self.criterion == "wanda" and activation_norm is not None:
             n_cols = weight.shape[1]
-            an = activation_norm[:n_cols] if activation_norm.shape[0] >= n_cols else (
-                torch.nn.functional.pad(activation_norm, (0, n_cols - activation_norm.shape[0]), value=1.0)
+            an = (
+                activation_norm[:n_cols]
+                if activation_norm.shape[0] >= n_cols
+                else (torch.nn.functional.pad(activation_norm, (0, n_cols - activation_norm.shape[0]), value=1.0))
             )
             return weight.abs() * an.unsqueeze(0)
         else:
@@ -219,6 +219,7 @@ class NMSparsityPruner:
                 else:
                     norms[name] = col_norm
                     counts[name] = 1
+
             return hook_fn
 
         for name, module in model.named_modules():
@@ -302,7 +303,4 @@ class NMSparsityPruner:
         return self._masks
 
     def __repr__(self) -> str:
-        return (
-            f"NMSparsityPruner(N={self.n}, M={self.m}, "
-            f"criterion='{self.criterion}', sparsity={self.sparsity:.2f})"
-        )
+        return f"NMSparsityPruner(N={self.n}, M={self.m}, criterion='{self.criterion}', sparsity={self.sparsity:.2f})"

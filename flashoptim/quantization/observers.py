@@ -251,7 +251,8 @@ class HistogramObserver(nn.Module):
             centers_clipped = bin_centers[:candidate_bins]
             quantized_centers = torch.clamp(
                 torch.round((centers_clipped - self.min_val) / scale_candidate),
-                0, 255,
+                0,
+                255,
             )
             dequantized = quantized_centers * scale_candidate + self.min_val
 

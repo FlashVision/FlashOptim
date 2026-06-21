@@ -4,6 +4,9 @@ from flashoptim.losses.distillation_loss import DistillationLoss, KLDivergenceLo
 from flashoptim.losses.regularization_loss import SparsityLoss, L1RegularizationLoss
 
 __all__ = [
-    "DistillationLoss", "KLDivergenceLoss", "FeatureMatchingLoss",
-    "SparsityLoss", "L1RegularizationLoss",
+    "DistillationLoss",
+    "KLDivergenceLoss",
+    "FeatureMatchingLoss",
+    "SparsityLoss",
+    "L1RegularizationLoss",
 ]

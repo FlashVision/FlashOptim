@@ -62,9 +62,7 @@ class Exporter:
         """
         format = format.lower()
         if format not in self.SUPPORTED_FORMATS:
-            raise ValueError(
-                f"Unsupported format: {format}. Supported: {self.SUPPORTED_FORMATS}"
-            )
+            raise ValueError(f"Unsupported format: {format}. Supported: {self.SUPPORTED_FORMATS}")
 
         output_path = Path(output_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -72,9 +70,7 @@ class Exporter:
         if format == "onnx":
             return self._export_onnx(output_path, dynamic_axes, **kwargs)
         else:
-            raise NotImplementedError(
-                f"Export to '{format}' is planned for a future release."
-            )
+            raise NotImplementedError(f"Export to '{format}' is planned for a future release.")
 
     def _export_onnx(
         self,
@@ -95,9 +91,7 @@ class Exporter:
             raise ValueError("Model must be set before export")
 
         self.model.eval()
-        dummy_input = torch.randn(
-            self.batch_size, 3, *self.input_size, device=next(self.model.parameters()).device
-        )
+        dummy_input = torch.randn(self.batch_size, 3, *self.input_size, device=next(self.model.parameters()).device)
 
         if dynamic_axes is None:
             dynamic_axes = {

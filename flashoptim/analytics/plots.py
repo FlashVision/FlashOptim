@@ -27,10 +27,7 @@ def plot_training_curves(
     try:
         import matplotlib.pyplot as plt
     except ImportError:
-        raise ImportError(
-            "matplotlib is required for plotting. "
-            "Install with: pip install flashoptim[analytics]"
-        )
+        raise ImportError("matplotlib is required for plotting. Install with: pip install flashoptim[analytics]")
 
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
@@ -83,8 +80,7 @@ def plot_optimization_comparison(
         import numpy as np  # noqa: F401  # noqa: F401
     except ImportError:
         raise ImportError(
-            "matplotlib and numpy are required for plotting. "
-            "Install with: pip install flashoptim[analytics]"
+            "matplotlib and numpy are required for plotting. Install with: pip install flashoptim[analytics]"
         )
 
     model_names = list(results.keys())
@@ -100,7 +96,7 @@ def plot_optimization_comparison(
 
     for ax, metric in zip(axes, metrics):
         values = [results[m].get(metric, 0) for m in model_names]
-        bars = ax.bar(model_names, values, color=plt.cm.Set2.colors[:len(values)])
+        bars = ax.bar(model_names, values, color=plt.cm.Set2.colors[: len(values)])
         ax.set_title(metric.replace("_", " ").title())
         ax.set_ylabel(metric)
 
@@ -139,10 +135,7 @@ def plot_sparsity_map(
     try:
         import matplotlib.pyplot as plt
     except ImportError:
-        raise ImportError(
-            "matplotlib is required for plotting. "
-            "Install with: pip install flashoptim[analytics]"
-        )
+        raise ImportError("matplotlib is required for plotting. Install with: pip install flashoptim[analytics]")
 
     layer_names = []
     sparsities = []

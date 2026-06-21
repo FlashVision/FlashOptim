@@ -65,9 +65,7 @@ class Registry:
         """
         if name not in self._registry:
             available = ", ".join(sorted(self._registry.keys()))
-            raise KeyError(
-                f"'{name}' not found in {self._name} registry. Available: [{available}]"
-            )
+            raise KeyError(f"'{name}' not found in {self._name} registry. Available: [{available}]")
         return self._registry[name](**kwargs)
 
     def get(self, name: str) -> Optional[Callable]:
@@ -101,7 +99,14 @@ COMPILERS = Registry("compilers")
 
 __all__ = [
     "Registry",
-    "BACKBONES", "NECKS", "HEADS", "LOSSES",
-    "DATASETS", "TRANSFORMS", "OPTIMIZERS",
-    "PRUNERS", "QUANTIZERS", "COMPILERS",
+    "BACKBONES",
+    "NECKS",
+    "HEADS",
+    "LOSSES",
+    "DATASETS",
+    "TRANSFORMS",
+    "OPTIMIZERS",
+    "PRUNERS",
+    "QUANTIZERS",
+    "COMPILERS",
 ]
