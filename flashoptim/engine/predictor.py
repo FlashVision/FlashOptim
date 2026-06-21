@@ -103,7 +103,6 @@ class Predictor:
                 output = self.model(input_tensor)
             return self._postprocess_torch(output)
         else:
-            import onnxruntime as ort
 
             input_name = self.model.get_inputs()[0].name
             output = self.model.run(None, {input_name: input_tensor.cpu().numpy()})

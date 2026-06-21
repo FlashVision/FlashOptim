@@ -11,7 +11,6 @@ import torch.nn as nn
 from torch.ao.quantization import (
     QConfig,
     convert,
-    get_default_qconfig,
     prepare,
 )
 from torch.ao.quantization.observer import (

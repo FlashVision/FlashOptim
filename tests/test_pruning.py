@@ -92,13 +92,13 @@ class TestStructuredPruner:
         model = _make_simple_model()
         pruner = StructuredPruner(sparsity=0.3, criterion="l1_norm")
         pruned = pruner.prune(model)
-        has_zeros = False
+        _has_zeros = False
         for module in pruned.modules():
             if isinstance(module, nn.Conv2d) and hasattr(module, "weight_orig"):
                 weight = module.weight
                 per_filter_norm = weight.abs().sum(dim=(1, 2, 3))
                 if (per_filter_norm == 0).any():
-                    has_zeros = True
+                    _has_zeros = True
         assert pruned is not None
 
     def test_compute_importance(self):
@@ -135,7 +135,7 @@ class TestLotteryTicketPruner:
         model = _make_simple_model()
         pruner = LotteryTicketPruner(target_sparsity=0.5, rounds=2)
         pruner.save_initial_weights(model)
-        result = pruner.find_ticket(model, train_fn=lambda m: m)
+        _result = pruner.find_ticket(model, train_fn=lambda m: m)
         assert pruner.current_sparsity > 0.0
 
 

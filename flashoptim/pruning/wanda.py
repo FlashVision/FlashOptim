@@ -7,7 +7,7 @@ forward pass for calibration.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict
 
 import torch
 import torch.nn as nn

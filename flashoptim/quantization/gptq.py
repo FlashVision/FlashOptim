@@ -6,12 +6,10 @@ Hessian-based weight updates for minimal output perturbation.
 
 from __future__ import annotations
 
-import math
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Tuple
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 from flashoptim.registry import QUANTIZERS
 

@@ -6,8 +6,7 @@ Ampere+ Sparse Tensor Cores for 2x throughput on supported hardware.
 
 from __future__ import annotations
 
-import copy
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Optional
 
 import torch
 import torch.nn as nn
@@ -128,7 +127,7 @@ class NMSparsityPruner:
         if self.permute_columns:
             inv_perm = torch.argsort(perm)
             weight = weight[:, inv_perm]
-            mask_orig = mask.clone()
+            mask.clone()
             mask = mask[:, inv_perm]
 
         if is_conv:
@@ -193,7 +192,7 @@ class NMSparsityPruner:
 
         Uses a greedy heuristic to group similar-importance columns together.
         """
-        n_cols = scores.shape[1]
+        scores.shape[1]
         col_importance = scores.sum(dim=0)
         perm = torch.argsort(col_importance, descending=True)
         return perm

@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
-import torch
 import torch.nn as nn
 import torch.nn.utils.prune as prune_utils
 

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 import torch
 import torch.nn as nn
@@ -90,7 +90,7 @@ class KnowledgeDistiller:
             Trained student model.
         """
         train_loader = kwargs.get("train_loader")
-        val_loader = kwargs.get("val_loader")
+        kwargs.get("val_loader")
         epochs = kwargs.get("epochs", 100)
         lr = kwargs.get("lr", 0.001)
         device = kwargs.get("device", "cuda" if torch.cuda.is_available() else "cpu")

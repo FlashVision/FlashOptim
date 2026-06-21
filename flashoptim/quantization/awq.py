@@ -6,8 +6,7 @@ per-channel scaling to protect important weights before quantization.
 
 from __future__ import annotations
 
-import copy
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Tuple
 
 import torch
 import torch.nn as nn

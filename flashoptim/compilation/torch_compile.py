@@ -7,7 +7,7 @@ backend configuration, and performance benchmarking utilities.
 from __future__ import annotations
 
 import time
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, Optional
 
 import torch
 import torch.nn as nn

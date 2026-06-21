@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 import torch
 import torch.nn as nn
@@ -79,7 +79,7 @@ def compute_map(
             if isinstance(gt_boxes, torch.Tensor):
                 gt_boxes = gt_boxes.tolist()
 
-            gt_indices_for_cls = [i for i, l in enumerate(gt_labels) if l == cls]
+            gt_indices_for_cls = [i for i, lbl in enumerate(gt_labels) if lbl == cls]
             total_gt += len(gt_indices_for_cls)
 
             for i, label in enumerate(pred_labels):

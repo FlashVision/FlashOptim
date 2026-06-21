@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Optional, Tuple
+from typing import Tuple
 
 import torch
 import torch.nn as nn
@@ -185,7 +185,6 @@ class HistogramObserver(nn.Module):
         num_quantized_bins = 128
 
         best_divergence = float("inf")
-        best_start = 0
         best_end = self.bins
 
         for num_bins in range(num_quantized_bins, self.bins + 1, 32):

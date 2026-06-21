@@ -3,8 +3,7 @@
 from __future__ import annotations
 
 import time
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, Optional
 
 import torch
 import torch.nn as nn

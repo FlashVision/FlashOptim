@@ -5,7 +5,6 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
-import torch
 import torch.nn as nn
 
 
@@ -81,7 +80,7 @@ def plot_optimization_comparison(
     """
     try:
         import matplotlib.pyplot as plt
-        import numpy as np
+        import numpy as np  # noqa: F401  # noqa: F401
     except ImportError:
         raise ImportError(
             "matplotlib and numpy are required for plotting. "

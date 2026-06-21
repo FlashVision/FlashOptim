@@ -6,8 +6,7 @@ reconstruction problem using Hessian information, similar to OBS/OBD.
 
 from __future__ import annotations
 
-import math
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 import torch
 import torch.nn as nn
