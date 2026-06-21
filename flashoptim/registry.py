@@ -97,10 +97,11 @@ TRANSFORMS = Registry("transforms")
 OPTIMIZERS = Registry("optimizers")
 PRUNERS = Registry("pruners")
 QUANTIZERS = Registry("quantizers")
+COMPILERS = Registry("compilers")
 
 __all__ = [
     "Registry",
     "BACKBONES", "NECKS", "HEADS", "LOSSES",
     "DATASETS", "TRANSFORMS", "OPTIMIZERS",
-    "PRUNERS", "QUANTIZERS",
+    "PRUNERS", "QUANTIZERS", "COMPILERS",
 ]

@@ -9,20 +9,22 @@ from flashoptim.engine.validator import Validator
 from flashoptim.engine.predictor import Predictor
 from flashoptim.engine.exporter import Exporter
 from flashoptim.cfg import get_config
-from flashoptim.quantization import PTQuantizer, QATTrainer
-from flashoptim.pruning import UnstructuredPruner, StructuredPruner
+from flashoptim.quantization import PTQuantizer, QATTrainer, GPTQQuantizer, AWQQuantizer, SmoothQuantizer
+from flashoptim.pruning import UnstructuredPruner, StructuredPruner, SparseGPTPruner, WandaPruner, NMSparsityPruner
 from flashoptim.distillation import KnowledgeDistiller, FeatureDistiller
 from flashoptim.nas import SearchSpace, Searcher
+from flashoptim.compilation import TorchCompiler
 from flashoptim.solutions import AutoOptimizer, DeploymentProfiler
 from flashoptim.analytics import Benchmark
 
 __all__ = [
     "FlashOptim", "Trainer", "Validator", "Predictor", "Exporter",
     "apply_lora", "apply_qlora", "merge_lora_weights", "get_config",
-    "PTQuantizer", "QATTrainer",
-    "UnstructuredPruner", "StructuredPruner",
+    "PTQuantizer", "QATTrainer", "GPTQQuantizer", "AWQQuantizer", "SmoothQuantizer",
+    "UnstructuredPruner", "StructuredPruner", "SparseGPTPruner", "WandaPruner", "NMSparsityPruner",
     "KnowledgeDistiller", "FeatureDistiller",
     "SearchSpace", "Searcher",
+    "TorchCompiler",
     "AutoOptimizer", "DeploymentProfiler",
     "Benchmark",
     "__version__",
